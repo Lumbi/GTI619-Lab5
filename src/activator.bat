@@ -72,11 +72,14 @@ if "%CFG_OPTS%"=="" (
 
 rem We use the value of the JAVACMD environment variable if defined
 set _JAVACMD=%JAVACMD%
-
+echo "line 75"
 if "%_JAVACMD%"=="" (
+echo "line 77"
+echo %JAVA_HOME%
+		echo exist "%JAVA_HOME%\bin\java.exe
   if not "%JAVA_HOME%"=="" (
     if exist "%JAVA_HOME%\bin\java.exe" set "_JAVACMD=%JAVA_HOME%\bin\java.exe"
-
+		
     rem if there is a java home set we make sure it is the first picked up when invoking 'java'
     SET "PATH=%JAVA_HOME%\bin;%PATH%"
   )
