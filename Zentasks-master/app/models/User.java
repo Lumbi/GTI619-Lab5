@@ -3,6 +3,9 @@ package models;
 import javax.persistence.*;
 import play.db.ebean.*;
 import com.avaje.ebean.*;
+import models.PasswordHasher;
+import java.lang.String;
+
 
 @Entity
 public class User extends Model {
@@ -11,11 +14,17 @@ public class User extends Model {
     public String email;
     public String name;
     public String password;
-    
-    public User(String email, String name, String password) {
+    public String group;
+    public String salt;
+
+
+    public User(String email, String name, String password,String group,String salt) {
       this.email = email;
       this.name = name;
       this.password = password;
+        this.group = group;
+        this.salt=salt;
+
     }
 
     public static Finder<String,User> find = new Finder<String,User>(
@@ -23,8 +32,11 @@ public class User extends Model {
     );
     
     public static User authenticate(String email, String password) {
-        return find.where().eq("email", email)
-            .eq("password", password).findUnique();
+     User attemptedLogin=find.where().eq("email", email).findUnique();
+        String saltedPassword= PasswordHasher.getHash(password,attemptedLogin.getSalt());
+        User loggedUser=find.where().eq("email", email)
+            .eq("password", saltedPassword).findUnique();
+        return loggedUser;
     }
 
 	public String getEmail() {
@@ -49,7 +61,13 @@ public class User extends Model {
 
 	public void setPassword(String password) {
 		this.password = password;
-	} 
-    
-    
+	}
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public String getGroup() {
+        return group;
+    }
 }

@@ -8,6 +8,7 @@ import views.html.*;
 import models.Project;
 import models.Task;
 import models.User;
+import java.security.MessageDigest;
 
 public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
@@ -27,9 +28,12 @@ public class Application extends Controller {
 	    public String password;
 	    
 	    public String validate() {
-	        if (User.authenticate(email, password) == null) {
+            User loggedUser;
+            loggedUser = User.authenticate(email, password);
+            if (loggedUser == null) {
 	          return "Invalid user or password";
 	        }
+
 	        return null;
 	    }
 	}
@@ -40,6 +44,10 @@ public class Application extends Controller {
 	        return badRequest(login.render(loginForm));
 	    } else {
 	        session().clear();
+            User loggedUser;
+            loggedUser = User.authenticate(loginForm.get().email, loginForm.get().password);
+
+            session("group", loggedUser.getGroup());
 	        session("email", loginForm.get().email);
 	        return redirect(
 	            routes.Application.index()
