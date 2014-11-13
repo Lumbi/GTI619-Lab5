@@ -1,0 +1,1 @@
+Fichiers accessibles côté client
