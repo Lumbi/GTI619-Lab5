@@ -1,4 +1,0 @@
-Zentasks
-========
-
-Zentasks play framework 
