@@ -9,7 +9,8 @@ module.exports = function(app, passport) {
 
 	// PROFILE SECTION =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
-		res.render('profile.ejs', {
+            var profileToRender=choseProfile(req.user.local.group)
+        res.render(profileToRender, {
 			user : req.user
 		});
 	});
@@ -192,4 +193,25 @@ function isLoggedIn(req, res, next) {
 		return next();
 
 	res.redirect('/');
+}
+
+function choseProfile(group){
+       var page;
+    switch(group)
+    {
+        case "Admin":
+           page="admin.ejs";
+            break;
+        case "Square":
+            page="squaretr.ejs";
+            break;
+        case "Circle":
+            page="circletr.ejs";
+            break;
+         default :
+            page="error.ejs";
+            break;
+    }
+
+return page;
 }

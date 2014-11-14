@@ -6,6 +6,7 @@ var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
 var User       = require('../app/models/user');
+var Log        =require('../app/models/log');
 
 // load the auth variables
 var configAuth = require('./auth'); // use this one for testing
@@ -26,6 +27,7 @@ module.exports = function(passport) {
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
+            console.log(JSON.stringify(user));
             done(err, user);
         });
     });
@@ -51,15 +53,47 @@ module.exports = function(passport) {
                     return done(err);
 
                 // if no user is found, return the message
-                if (!user)
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
+                if (!user){
+                    var userLog= new Log();
+                    userLog.log.result='Connection Failed : User does not exist';
+                    userLog.log.user=email;
+                    userLog.log.time=new Date();
+                    userLog.save(function (err, data) {
+                        if (err) console.log(err);
+                        else console.log('Saved : ', data );
+                    });
 
-                if (!user.validPassword(password))
+
+                    return done(null, false, req.flash('loginMessage', 'No user found.'));
+                }
+
+
+                if (!user.validPassword(password)){
+                    var userLog= new Log();
+                    userLog.log.result='Connection Failed : Wrong password';
+                    userLog.log.user=email;
+                    userLog.log.time=new Date();
+                    userLog.save(function (err, data) {
+                        if (err) console.log(err);
+                        else console.log('Saved : ', data );
+                    });
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                }
+
 
                 // all is well, return user
-                else
+                else{
+                    var userLog= new Log();
+                    userLog.log.result='Connection Succesfull';
+                    userLog.log.user=email;
+                    userLog.log.time=new Date();
+                    userLog.save(function (err, data) {
+                        if (err) console.log(err);
+                        else console.log('Saved : ', data );
+                    });
                     return done(null, user);
+                }
+
             });
         });
 
