@@ -203,10 +203,10 @@ function choseProfile(group){
            page="admin.ejs";
             break;
         case "Square":
-            page="squaretr.ejs";
+            page="square.ejs";
             break;
         case "Circle":
-            page="circletr.ejs";
+            page="circle.ejs";
             break;
          default :
             page="error.ejs";
