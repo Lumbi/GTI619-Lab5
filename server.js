@@ -2,6 +2,8 @@
 
 // set up ======================================================================
 // get all the tools we need
+var https 	 = require('https');
+var fs 		 = require('fs');
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT || 8080;
@@ -39,5 +41,12 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
-console.log('The magic happens on port ' + port);
+var secureServer = https.createServer({
+    key: fs.readFileSync('./ssl/server.key'),
+    cert: fs.readFileSync('./ssl/server.crt'),
+    ca: fs.readFileSync('./ssl/ca.crt'),
+    requestCert: true,
+    rejectUnauthorized: false
+}, app).listen(port, function() {
+    console.log("Secure Express server listening on port " + port);
+});
