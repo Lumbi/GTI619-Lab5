@@ -11,6 +11,8 @@ var userSchema = mongoose.Schema({
         password     : String,
         group        : String,
         salt         : String,
+        TempLocked   : String,
+        locked       : String,
     },
     facebook         : {
         id           : String,
@@ -38,9 +40,19 @@ userSchema.methods.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
+//check if the user has been totally locked out of the system
+userSchema.methods.isLockedFinal = function() {
+
+console.log("lock :"+ this.local.locked);
+    console.log(this.local.locked=='T')
+    var a= this.local.locked=='T';
+    return a;
+};
+
+
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-  var hashedPassword= createHash(password,this.local.salt);
+    var hashedPassword= createHash(password,this.local.salt);
     console.log(this.local.salt);
 
     return hashedPassword==this.local.password;

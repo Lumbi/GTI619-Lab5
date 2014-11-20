@@ -7,6 +7,9 @@ var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 // load up the user model
 var User       = require('../app/models/user');
 var Log        =require('../app/models/log');
+var SecurityOption        =require('../app/models/securityOption');
+
+var bruteForceHandler=require('../app/utility/bruteForceHandler');
 
 // load the auth variables
 var configAuth = require('./auth'); // use this one for testing
@@ -32,6 +35,8 @@ module.exports = function(passport) {
         });
     });
 
+
+
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
@@ -54,6 +59,7 @@ module.exports = function(passport) {
 
                 // if no user is found, return the message
                 if (!user){
+
                     var userLog= new Log();
                     userLog.log.result='Connection Failed : User does not exist';
                     userLog.log.user=email;
@@ -68,7 +74,9 @@ module.exports = function(passport) {
                 }
 
 
-                if (!user.validPassword(password)){
+                if (user.isLockedFinal()||!user.validPassword(password)||!validateTempLockedOver(user)){
+                    var test=new SecurityOption();
+                   bruteForceHandler.bruteForceProtect(user);
                     var userLog= new Log();
                     userLog.log.result='Connection Failed : Wrong password';
                     userLog.log.user=email;
@@ -83,6 +91,10 @@ module.exports = function(passport) {
 
                 // all is well, return user
                 else{
+                    console.log('Loading security')
+
+
+
                     var userLog= new Log();
                     userLog.log.result='Connection Succesfull';
                     userLog.log.user=email;
@@ -410,3 +422,12 @@ module.exports = function(passport) {
     }));
 
 };
+
+function validateTempLockedOver(user){
+    if(user._doc.local.tempLocked!=''){
+        return  bruteForceHandler.manageLock(user)
+    }
+    else{
+        return true
+    }
+}
