@@ -54,7 +54,11 @@
 			</tr>
 			<tr>
 				<td>Brute Force Prevention</td>
-				<td><input type="checkbox" name="security[antibruteforce]"></td>
+				<td><input type="checkbox" name="security[antibruteforce]" 
+					<% if (security.enableBruteForceProtection=='on') { %>
+						checked
+					<% } %>
+				</td>
 			</tr>
 			<tr>
 				<td>Max Password Tries</td>
