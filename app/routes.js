@@ -21,6 +21,17 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
+	// ADMIN ==============================
+	app.get('/profile/admin-update', function(req, res) {
+		if(req.user.local.group=="Admin"){
+
+			// handle admin option changes here
+
+		}else{
+			res.redirect('/profile');
+		}
+	});
+
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================

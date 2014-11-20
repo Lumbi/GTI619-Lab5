@@ -44,9 +44,8 @@
 
 	</div>
 
+<form action="/profile/admin-update">
 	</p>
-
-<form action="">
 	<div class="row" style="width:100%">
 		<table>
 			<tr>
@@ -55,28 +54,46 @@
 			</tr>
 			<tr>
 				<td>Brute Force Prevention</td>
-				<td><input type="checkbox" name="cbk-sec-brute-force"></td>
+				<td><input type="checkbox" name="secop-brute-force"></td>
 			</tr>
 			<tr>
-				<td>Force Password Change (every month)</td>
-				<td><input type="checkbox" name="cbk-sec-pw-change-period"></td>
+				<td>Max Password Tries</td>
+				<td><input type="number" name="secop-pw-max-tries" min="1" max="10"></td>
 			</tr>
 			<tr>
-				<td>Force Password Change (after forgot password)</td>
-				<td><input type="checkbox" name="cbk-sec-pw-change-forgot"></td>
+				<td>Authentification Delay (minutes)</td>
+				<td><input type="number" name="secop-pw-auth-delay" min="0" max="10080"></td>
 			</tr>
 			<tr>
-				<td>Force Password Change (after 10 tries)</td>
-				<td><input type="checkbox" name="cbk-sec-pw-change-tries"></td>
+				<td>Permanent Deny After Second Attempt</td>
+				<td><input type="checkbox" name="secop-pw-perma-ban"></td>
 			</tr>
 			<tr>
-				<td>Require Complex Password</td>
-				<td><input type="checkbox" name="cbk-sec-pw-complex"></td>
+				<td>Require Password Change Every (days)</td>
+				<td><input type="number" name="secop-pw-change-days" min="0" max="365"></td>
+			</tr>
+			<tr>
+				<td>Require Password Change After Forgetting</td>
+				<td><input type="checkbox" name="secop-pw-change-forgot"></td>
+			</tr>
+			<tr>
+				<td>Minimum Password Complexity</td>
+				<td>
+					<input type="radio" name="secop-pw-complex" value="low"> Low
+  					<input type="radio" name="secop-pw-complex" value="medium"> Medium
+  					<input type="radio" name="secop-pw-complex" value="high"> High
+				</td>
 			</tr>
 		</table>
 	</div>
-
+	</br>
+	<input type="submit" class="btn btn-default btn-sm">
 </form>
+
+	</br>
+	</br>
+	</br>
+
 
 </div>
 </body>
