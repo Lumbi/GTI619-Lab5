@@ -21,29 +21,24 @@
 		<!-- LOCAL INFORMATION -->
 		<div class="col-sm-6">
 			<div class="well">
-				<h3><span class="fa fa-user"></span> Local</h3>
+				<h3><span class="fa fa-user"></span> Circle</h3>
+
+				<svg width="100" height="100">
+					<rect width="80" height="80" fill="blue" />
+				</svg>
+				</p>
 
 				<% if (user.local.email) { %>
 					<p>
 						<strong>id</strong>: <%= user._id %><br>
 						<strong>email</strong>: <%= user.local.email %><br>
-						<strong>password</strong>: <%= user.local.password %>
                         <strong>group</strong>: <%= user.local.group %>
 					</p>
-					
-					<a href="/unlink/local" class="btn btn-default">Unlink</a>
-				<% } else { %>
-					<a href="/connect/local" class="btn btn-default">Connect Local</a>
 				<% } %>
 
 			</div>
 		</div>
 
-	</div>
-
-	<div class="text-center">
-		<p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
-		<p>Visit the <a href="http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local">tutorial</a>.</p>
 	</div>
 
 </div>
