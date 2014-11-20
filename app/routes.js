@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
 module.exports = function(app, passport) {
+    var bodyParser = require('body-parser')
 
+    app.use( bodyParser.json() );
 // ROUTES NORMALES ===============================================================
 
 	// HOME =========================
@@ -38,10 +40,12 @@ module.exports = function(app, passport) {
 	});
 
 	// ADMIN ==============================
-	app.post('/profile/admin-update', function(req, res) {
-		if(req.user.local.group=="Admin"){
+	app.post('/profile/admin-update',isLoggedIn, function(req, res) {
+		console.log("request: "+ JSON.stringify(req.body.security))
+        console.log("dfe"+req.user.local.group)
+        if(req.user.local.group=="Admin"){
 
-			// handle admin option changes here
+
 			
 		}else{
 			res.redirect('/profile');
