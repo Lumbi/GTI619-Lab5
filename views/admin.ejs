@@ -6,6 +6,9 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		body 		{ padding-top:80px; word-wrap:break-word; }
+		table { border-radius:10px; -webkit-border-radius: 10px; -moz-border-radius: 10px; background-color: #DDDDDD; }
+		th { background-color: #EEEEEE; padding:10px; }
+		td { text-align:left; padding:10px; }
 	</style>
 </head>
 <body>
@@ -40,6 +43,40 @@
 		</div>
 
 	</div>
+
+	</p>
+
+<form action="">
+	<div class="row" style="width:100%">
+		<table>
+			<tr>
+				<th>Security Options</th>
+				<th>On/Off</th>
+			</tr>
+			<tr>
+				<td>Brute Force Prevention</td>
+				<td><input type="checkbox" name="cbk-sec-brute-force"></td>
+			</tr>
+			<tr>
+				<td>Force Password Change (every month)</td>
+				<td><input type="checkbox" name="cbk-sec-pw-change-period"></td>
+			</tr>
+			<tr>
+				<td>Force Password Change (after forgot password)</td>
+				<td><input type="checkbox" name="cbk-sec-pw-change-forgot"></td>
+			</tr>
+			<tr>
+				<td>Force Password Change (after 10 tries)</td>
+				<td><input type="checkbox" name="cbk-sec-pw-change-tries"></td>
+			</tr>
+			<tr>
+				<td>Require Complex Password</td>
+				<td><input type="checkbox" name="cbk-sec-pw-complex"></td>
+			</tr>
+		</table>
+	</div>
+
+</form>
 
 </div>
 </body>
