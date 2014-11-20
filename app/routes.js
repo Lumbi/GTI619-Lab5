@@ -1,4 +1,8 @@
+var bodyparser = require("body-parser");
+
 module.exports = function(app, passport) {
+
+	app.use(bodyparser);
 
 // ROUTES NORMALES ===============================================================
 
@@ -22,10 +26,12 @@ module.exports = function(app, passport) {
 	});
 
 	// ADMIN ==============================
-	app.get('/profile/admin-update', function(req, res) {
+	app.post('/profile/admin-update', function(req, res) {
 		if(req.user.local.group=="Admin"){
 
 			// handle admin option changes here
+
+			console.log(req.body.security.antibruteforce);
 
 		}else{
 			res.redirect('/profile');

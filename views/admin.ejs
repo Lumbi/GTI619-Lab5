@@ -54,34 +54,34 @@
 			</tr>
 			<tr>
 				<td>Brute Force Prevention</td>
-				<td><input type="checkbox" name="secop-brute-force"></td>
+				<td><input type="checkbox" name="security[antibruteforce]"></td>
 			</tr>
 			<tr>
 				<td>Max Password Tries</td>
-				<td><input type="number" name="secop-pw-max-tries" min="1" max="10"></td>
+				<td><input type="number" name="security[maxpwtries]" min="1" max="10"></td>
 			</tr>
 			<tr>
 				<td>Authentification Delay (minutes)</td>
-				<td><input type="number" name="secop-pw-auth-delay" min="0" max="10080"></td>
+				<td><input type="number" name="security[authdelay]" min="0" max="10080"></td>
 			</tr>
 			<tr>
 				<td>Permanent Deny After Second Attempt</td>
-				<td><input type="checkbox" name="secop-pw-perma-ban"></td>
+				<td><input type="checkbox" name="security[autopermaban]"></td>
 			</tr>
 			<tr>
 				<td>Require Password Change Every (days)</td>
-				<td><input type="number" name="secop-pw-change-days" min="0" max="365"></td>
+				<td><input type="number" name="security[pwinvalidafter]" min="0" max="365"></td>
 			</tr>
 			<tr>
 				<td>Require Password Change After Forgetting</td>
-				<td><input type="checkbox" name="secop-pw-change-forgot"></td>
+				<td><input type="checkbox" name="security[pwinvalidforget]"></td>
 			</tr>
 			<tr>
 				<td>Minimum Password Complexity</td>
 				<td>
-					<input type="radio" name="secop-pw-complex" value="low"> Low
-  					<input type="radio" name="secop-pw-complex" value="medium"> Medium
-  					<input type="radio" name="secop-pw-complex" value="high"> High
+					<input type="radio" name="security[pwcomplex]" value="low"> Low
+  					<input type="radio" name="security[pwcomplex]" value="medium"> Medium
+  					<input type="radio" name="security[pwcomplex]" value="high"> High
 				</td>
 			</tr>
 		</table>

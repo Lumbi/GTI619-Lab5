@@ -114,19 +114,18 @@ module.exports = function(passport) {
 
         // asynchronous
         process.nextTick(function() {
-            // if the user is not already logged in:
+            // utilisateur déjà connecté
             if (!req.user) {
                 User.findOne({ 'local.email' :  email }, function(err, user) {
-                    // if there are any errors, return the error
                     if (err)
                         return done(err);
 
-                    // check to see if theres already a user with that email
+                    // valid l'email
                     if (user) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
 
-                        // create the user
+                        // nouveau user
                         var newUser            = new User();
 
                         newUser.local.email    = email;
