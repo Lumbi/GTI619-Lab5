@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication- Admin</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body 		{ padding-top:80px; word-wrap:break-word; }
+        table { border-radius:10px; -webkit-border-radius: 10px; -moz-border-radius: 10px; background-color: #DDDDDD; }
+        th { background-color: #EEEEEE; padding:10px; }
+        td { text-align:left; padding:10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span>Grid card validation</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+
+
+    <form action="/gridcard" method="post">
+        </p>
+        <div class="row" style="width:100%">
+            <table>
+                <tr>
+                    <th>Grid card question</th>
+                    <th> <%= question %> </th>
+                </tr>
+
+                <tr>
+                    <td>Answer</td>
+                    <td><input  name="answer" min="0" max="10080"></td>
+                </tr>
+                </br>
+                <tr>
+                    <td></td>
+                    <td> <input type="submit" class="btn btn-default btn-sm"></td>
+                </tr>
+                </table>
+
+            </br>
+            </br>
+
+        </div>
+        </br>
+
+    </form>
+
+
+
+
+</div>
+</body>
+</html>

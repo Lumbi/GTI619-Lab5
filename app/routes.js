@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var gridcard=require('../app/utility/gridCardManager');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
@@ -13,7 +14,11 @@ module.exports = function(app, passport) {
 
 	// PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
+        if(!req.session.twofactor){
+            res.redirect('/logout');
+        }
         var profileToRender=choseProfile(req.user.local.group)
+           console.log(req.session.twofactor==true)
 
         if(req.user.local.group=="Admin")
         {
@@ -63,10 +68,23 @@ module.exports = function(app, passport) {
 
 	// LOGIN - POST ===========================
 	app.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		successRedirect : '/gridcard', // redirect to the secure profile section
 		failureRedirect : '/login', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}));
+
+    app.get('/gridcard',isLoggedIn, function(req, res) {
+        //var test=req.cookies;
+        //console.log("user "+req.user.local.email);
+        gridcard.getQuestion(req.cookies,req.user,res);
+
+
+    });
+    app.post('/gridcard',isLoggedIn, function(req, res) {
+        console.log(req.body.answer)
+        gridcard.validateAnswer(req.cookies,req.body.answer,req,res);
+
+    });
 
 	// SIGNUP - GET ==============================
 	app.get('/signup', function(req, res) {
