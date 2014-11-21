@@ -1,4 +1,7 @@
+var mongoose = require('mongoose');
 var adminUpdate=require('../app/utility/adminUpdate');
+
+
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
 
@@ -12,10 +15,24 @@ module.exports = function(app, passport) {
 
 	// PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
-            var profileToRender=choseProfile(req.user.local.group)
-        res.render(profileToRender, {
-			user : req.user
-		});
+        var profileToRender=choseProfile(req.user.local.group)
+
+        if(req.user.local.group=="Admin")
+        {
+           	var securityOptions = mongoose.model("securityOptions");
+			securityOptions.find({},function(err, result) {
+			   console.log(result);
+			   console.log(result[0].securityOption);
+			           res.render(profileToRender, {
+			                           user : req.user,
+			                           security : result[0].securityOption
+			                   });
+			   });
+        }else{
+           res.render(profileToRender, {
+           	user : req.user
+           });
+        }
 	});
 
 	// LOGOUT ==============================
