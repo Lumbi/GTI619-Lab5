@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
-
+    var adminUpdate=require('../app/utility/adminUpdate');
     app.use( bodyParser.json() );
 // ROUTES NORMALES ===============================================================
 
@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
         console.log("dfe"+req.user.local.group)
         if(req.user.local.group=="Admin"){
 
-
+            adminUpdate.updateSecurityOptions(req.body.security,res);
 			
 		}else{
 			res.redirect('/profile');
