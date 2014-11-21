@@ -1,3 +1,4 @@
+var adminUpdate=require('../app/utility/adminUpdate');
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
 
@@ -28,7 +29,7 @@ module.exports = function(app, passport) {
 		console.log("request: "+ JSON.stringify(req.body.security))
         console.log("dfe"+req.user.local.group)
         if(req.user.local.group=="Admin"){
-
+            adminUpdate.updateSecurityOptions(req.body.security,res);
 
 			
 		}else{
