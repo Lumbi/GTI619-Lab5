@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var gridcard=require('../app/utility/gridCardManager');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
@@ -14,11 +13,7 @@ module.exports = function(app, passport) {
 
 	// PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
-        if(!req.session.twofactor){
-            res.redirect('/logout');
-        }
         var profileToRender=choseProfile(req.user.local.group)
-           console.log(req.session.twofactor==true)
 
         if(req.user.local.group=="Admin")
         {
