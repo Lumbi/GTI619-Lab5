@@ -61,11 +61,11 @@
                       </tr>
                       <tr>
                               <td>Max Password Tries</td>
-                              <td><input type="number" name="security[maxpwtries]" min="1" max="10"></td>
+                              <td><input type="number" name="security[maxpwtries]" min="1" max="10" value=<%= security.numberOfTry %>> </td>
                       </tr>
                       <tr>
                               <td>Authentification Delay (minutes)</td>
-                              <td><input type="number" name="security[authdelay]" min="0" max="10080"></td>
+                              <td><input type="number" name="security[authdelay]" min="0" max="10080" value=<%= security.timeout %>></td>
                       </tr>
                       <tr>
                               <td>Permanent Deny After Second Attempt</td>

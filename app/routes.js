@@ -1,4 +1,8 @@
 var mongoose = require('mongoose');
+var adminUpdate=require('../app/utility/adminUpdate');
+var gridcard=require('../app/utility/gridCardManager')
+
+var mongoose = require('mongoose');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
@@ -44,8 +48,8 @@ module.exports = function(app, passport) {
 		console.log("request: "+ JSON.stringify(req.body.security))
         console.log("dfe"+req.user.local.group)
         if(req.user.local.group=="Admin"){
-
             adminUpdate.updateSecurityOptions(req.body.security,res);
+
 			
 		}else{
 			res.redirect('/profile');
