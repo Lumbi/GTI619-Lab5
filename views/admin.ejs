@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+      <title>Node Authentication- Admin</title>
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+      <style>
+              body { padding-top:80px; word-wrap:break-word; }
+              table { border-radius:10px; -webkit-border-radius: 10px; -moz-border-radius: 10px; background-color: #DDDDDD; }
+              th { background-color: #EEEEEE; padding:10px; }
+              td { text-align:left; padding:10px; }
+      </style>
+</head>
+<body>
+<div class="container">
+
+      <div class="page-header text-center">
+              <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+              <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+      </div>
+
+      <div class="row">
+
+              <!-- LOCAL INFORMATION -->
+              <div class="col-sm-6">
+                      <div class="well">
+                              <h3><span class="fa fa-user"></span> Local</h3>
+
+                              <% if (user.local.email) { %>
+                                      <p>
+                                            <strong>id</strong>: <%= user._id %><br>
+                                            <strong>email</strong>: <%= user.local.email %><br>
+                                            <strong>password</strong>: <%= user.local.password %>
+                        					<strong>group</strong>: <%= user.local.group %>
+                                      </p>
+                                      
+                                      <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                              <% } %>
+
+                      </div>
+              </div>
+
+      </div>
+
+<form action="/profile/admin-update" method="post">
+      </p>
+      <div class="row" style="width:100%">
+              <table>
+                      <tr>
+                              <th>Security Options</th>
+                              <th>On/Off</th>
+                      </tr>
+                      <tr>
+                              <td>Brute Force Prevention</td>
+                              <td><input type="checkbox" name="security[antibruteforce]" 
+                                      <% if (security.enableBruteForceProtection=='on') { %>
+                                              checked
+                                      <% } %>
+                                      >
+                              </td>
+                      </tr>
+                      <tr>
+                              <td>Max Password Tries</td>
+                              <td><input type="number" name="security[maxpwtries]" min="1" max="10"></td>
+                      </tr>
+                      <tr>
+                              <td>Authentification Delay (minutes)</td>
+                              <td><input type="number" name="security[authdelay]" min="0" max="10080"></td>
+                      </tr>
+                      <tr>
+                              <td>Permanent Deny After Second Attempt</td>
+                              <td><input type="checkbox" name="security[autopermaban]"></td>
+                      </tr>
+                      <tr>
+                              <td>Require Password Change Every (days)</td>
+                              <td><input type="number" name="security[pwinvalidafter]" min="0" max="365"></td>
+                      </tr>
+                      <tr>
+                              <td>Require Password Change After Forgetting</td>
+                              <td><input type="checkbox" name="security[pwinvalidforget]"></td>
+                      </tr>
+                      <tr>
+                              <td>Minimum Password Complexity</td>
+                              <td>
+                                      <input type="radio" name="security[pwcomplex]" value="low"> Low
+                                      <input type="radio" name="security[pwcomplex]" value="medium"> Medium
+                                      <input type="radio" name="security[pwcomplex]" value="high"> High
+                              </td>
+                      </tr>
+              </table>
+      </div>
+      </br>
+      <input type="submit" class="btn btn-default btn-sm">
+</form>
+
+      </br>
+      </br>
+      </br>
+</div>
+</body>
+</html>
