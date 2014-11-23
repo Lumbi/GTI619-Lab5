@@ -3,6 +3,7 @@ var adminUpdate=require('../app/utility/adminUpdate');
 var gridcard=require('../app/utility/gridCardManager')
 
 var mongoose = require('mongoose');
+var url = require('url');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
@@ -50,9 +51,85 @@ module.exports = function(app, passport) {
         if(req.user.local.group=="Admin"){
             adminUpdate.updateSecurityOptions(req.body.security,res);
 
-			
 		}else{
 			res.redirect('/profile');
+		}
+	});
+
+	// ADMIN-USERS =============================
+	app.get('/profile/admin-users', function(req,res){
+		if(req.user.local.group=="Admin"){
+
+			if(req.query.id == undefined)
+			{
+				var users = mongoose.model("User");
+				users.find({}, function(err, result){
+					res.render("admin-users.ejs",
+						{
+							users : result
+						});
+				});
+			}else{
+				var users = mongoose.model("User");
+				users.findOne({_id : req.query.id },function(err, result){
+					res.render("admin-user.ejs", {
+						user : result
+					});
+				});
+			}
+
+		}else{
+			res.redirect('/');
+		}
+	});
+
+	// ADMIN UNLOCK ================================
+	app.get('/admin/unlock', function(req, res){
+		if(req.user.local.group=="Admin"){
+
+			if(req.query.id != undefined){
+				var users = mongoose.model("User");
+
+				users.findById(req.query.id, function(err, result){
+					if(err){
+						console.warn(err.message);
+					}else{
+						result.local.locked = '2';
+						result.save(function(err2, result2)
+						{
+							if(err2){
+								console.warn(err.message);
+							}
+							res.redirect("/profile/admin-users");
+						});
+					}
+				});
+			}else{
+				res.redirect("/profile/admin-users");
+			}
+
+		}else{
+			res.redirect('/');
+		}
+	});
+
+	// ADMIN GENERATION DE MOT DE PASSE ===========
+	app.get('/admin/generatepw', function(req, res){
+		if(req.user.local.group=="Admin"){
+
+			if(req.query.id != undefined)
+			{
+				require('crypto').randomBytes(8, function(ex, buf) {
+	  				var nouveauMotDePasse = buf.toString('hex');
+	  				//TODO: mettre à jour le mot de passe de l'utilisateur (avec Passport?)
+				});
+
+			}else{
+				res.redirect("/profile/admin-users");
+			}
+			
+		}else{
+			res.redirect('/');
 		}
 	});
 

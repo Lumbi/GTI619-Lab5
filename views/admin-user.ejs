@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+      <title>Authentication - Edit User</title>
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+      <style>
+              body { padding-top:80px; word-wrap:break-word; }
+              table { width:100%; border-radius:10px; -webkit-border-radius: 10px; -moz-border-radius: 10px;  }
+              th { background-color: #EEEEEE; padding:10px; }
+              td { text-align:left; padding:10px; }
+      </style>
+</head>
+<body>
+<div class="container">
+
+	<a href="/profile/admin-users" class="btn btn-default btn-sm">Back</a>
+
+      <div class="page-header text-center">
+              <h1><span class="fa fa-anchor"></span> User</h1>
+      </div>
+
+      <div class="row">
+
+              <!-- LOCAL INFORMATION -->
+              <div class="col-sm-6">
+                      <div class="well">
+
+							<% if (user.local.email) { %>
+                                      <p>
+                                            <strong>id</strong>: <%= user._id %><br>
+                                            <strong>email</strong>: <%= user.local.email %><br>
+                                            <strong>password</strong>: <%= user.local.password %>
+                        					<strong>group</strong>: <%= user.local.group %>
+                                      </p>
+
+                                      <% if (user.local.locked == '1') { %>
+                                      <p>
+                                      		<a href="/admin/unlock?id=<%= user._id%>" class="btn btn-default btn-sm">Unlock
+                                      		</a><br>
+                                      </p>
+                                      <% } %>
+
+                                      <p>
+                                      		<a href="/admin/generatepw?id=<%= user._id%>" class="btn btn-default btn-sm">Generate Password</a>
+                                      </p>
+                            <% } %>
+
+                      </div>
+              </div>
+
+      </div>
+</div>
+</body>
+</html>
