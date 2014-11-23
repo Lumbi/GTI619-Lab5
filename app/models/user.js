@@ -13,6 +13,7 @@ var userSchema = mongoose.Schema({
         salt         : String,
         TempLocked   : String,
         locked       : String,
+        gridcard     : String,
     }
 
 });

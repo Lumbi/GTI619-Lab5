@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
 var adminUpdate=require('../app/utility/adminUpdate');
+var gridcard=require('../app/utility/gridCardManager')
 
+var mongoose = require('mongoose');
 
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
-
+    var adminUpdate=require('../app/utility/adminUpdate');
     app.use( bodyParser.json() );
 // ROUTES NORMALES ===============================================================
 
@@ -19,19 +21,19 @@ module.exports = function(app, passport) {
 
         if(req.user.local.group=="Admin")
         {
-           	var securityOptions = mongoose.model("securityOptions");
-			securityOptions.find({},function(err, result) {
-			   console.log(result);
-			   console.log(result[0].securityOption);
-			           res.render(profileToRender, {
-			                           user : req.user,
-			                           security : result[0].securityOption
-			                   });
-			   });
+	        var securityOptions = mongoose.model("securityOptions");
+    	    securityOptions.find({},function(err, result) {
+    	    	console.log(result);
+    	    	console.log(result[0].securityOption);
+		        res.render(profileToRender, {
+					user : req.user,
+					security : result[0].securityOption
+				});
+        	});
         }else{
-           res.render(profileToRender, {
-           	user : req.user
-           });
+	        res.render(profileToRender, {
+				user : req.user
+			});
         }
 	});
 
@@ -65,10 +67,23 @@ module.exports = function(app, passport) {
 
 	// LOGIN - POST ===========================
 	app.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		successRedirect : '/gridcard', // redirect to the secure profile section
 		failureRedirect : '/login', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}));
+
+    app.get('/gridcard',isLoggedIn, function(req, res) {
+        //var test=req.cookies;
+        //console.log("user "+req.user.local.email);
+        gridcard.getQuestion(req.cookies,req.user,res);
+
+
+    });
+    app.post('/gridcard',isLoggedIn, function(req, res) {
+        console.log(req.body.answer)
+        gridcard.validateAnswer(req.cookies,req.body.answer,req,res);
+
+    });
 
 	// SIGNUP - GET ==============================
 	app.get('/signup', function(req, res) {
