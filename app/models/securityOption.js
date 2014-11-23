@@ -15,7 +15,9 @@ var userSchema = mongoose.Schema({
         numberOfTry           : String,
         timeout               : String,
        timeframe              : String,
-       enableBruteForceProtection : String
+       enableBruteForceProtection : String,
+       enableDenyAfterSecondAttempt : String,
+       authdelay : String
     }
 
 });

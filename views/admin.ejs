@@ -61,19 +61,31 @@
                       </tr>
                       <tr>
                               <td>Max Password Tries</td>
-                              <td><input type="number" name="security[maxpwtries]" min="1" max="10"></td>
+                              <td><input type="number" name="security[maxpwtries]" min="1" max="10" 
+                              	value = "<%= security.numberOfTry %>">
+                              </td>
                       </tr>
                       <tr>
                               <td>Authentification Delay (minutes)</td>
-                              <td><input type="number" name="security[authdelay]" min="0" max="10080"></td>
+                              <td><input type="number" name="security[authdelay]" min="0" max="10080"
+                              	value = "<%= security.authdelay%>">
+                              </td>
                       </tr>
                       <tr>
                               <td>Permanent Deny After Second Attempt</td>
-                              <td><input type="checkbox" name="security[autopermaban]"></td>
+                              <td><input type="checkbox" name="security[autopermaban]"
+                              	<% if (security.enableDenyAfterSecondAttempt=='on') { %>
+                              		checked
+                          		<% } %>
+                              	>
+                              </td>
                       </tr>
                       <tr>
                               <td>Require Password Change Every (days)</td>
-                              <td><input type="number" name="security[pwinvalidafter]" min="0" max="365"></td>
+                              <td><input type="number" name="security[pwinvalidafter]" min="0" max="365"
+                              	value = "<%= security.timeframe%>"
+                              	>
+                              </td>
                       </tr>
                       <tr>
                               <td>Require Password Change After Forgetting</td>
@@ -82,9 +94,21 @@
                       <tr>
                               <td>Minimum Password Complexity</td>
                               <td>
-                                      <input type="radio" name="security[pwcomplex]" value="low"> Low
-                                      <input type="radio" name="security[pwcomplex]" value="medium"> Medium
-                                      <input type="radio" name="security[pwcomplex]" value="high"> High
+                                      <input type="radio" name="security[pwcomplex]" value="low"
+                                      	<% if (security.complexity=='1') { %>
+                              				checked
+                              			<% } %>
+                                      > Low
+                                      <input type="radio" name="security[pwcomplex]" value="medium"
+                                      	<% if (security.complexity=='2') { %>
+                              				checked
+                              			<% } %>
+                                      > Medium
+                                      <input type="radio" name="security[pwcomplex]" value="high"
+                                      	<% if (security.complexity=='3') { %>
+                              				checked
+                              			<% } %>
+                                      > High
                               </td>
                       </tr>
               </table>
