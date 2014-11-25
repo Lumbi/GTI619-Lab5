@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
 
 	// PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
+        req.user.local.locked='';
         var profileToRender=choseProfile(req.user.local.group)
             if(!twoFactor(req)){
                 res.redirect('/logout');
@@ -66,8 +67,14 @@ module.exports = function(app, passport) {
 	});
 
 	// ADMIN-USERS =============================
-	app.get('/profile/admin-users', function(req,res){
-		if(req.user.local.group=="Admin"){
+	app.get('/profile/admin-users',isLoggedIn, function(req,res){
+        if(!twoFactor(req)){
+            res.redirect('/logout');
+            return;
+        }
+
+
+        if(req.user.local.group=="Admin"){
 
 			if(req.query.id == undefined)
 			{
@@ -93,8 +100,12 @@ module.exports = function(app, passport) {
 	});
 
 	// ADMIN UNLOCK ================================
-	app.get('/admin/unlock', function(req, res){
-		if(req.user.local.group=="Admin"){
+	app.get('/admin/unlock',isLoggedIn, function(req, res){
+        if(!twoFactor(req)){
+            res.redirect('/logout');
+            return;
+        }
+        if(req.user.local.group=="Admin"){
 
 			if(req.query.id != undefined){
 				var users = mongoose.model("User");
@@ -103,7 +114,8 @@ module.exports = function(app, passport) {
 					if(err){
 						console.warn(err.message);
 					}else{
-						result.local.locked = '2';
+						result.local.locked = '';
+                        result.local.tempLocked='';
 						result.save(function(err2, result2)
 						{
 							if(err2){

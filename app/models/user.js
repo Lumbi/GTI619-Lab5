@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
         password     : String,
         group        : String,
         salt         : String,
-        TempLocked   : String,
+        tempLocked   : String,
         locked       : String,
         gridcard     : String,
     }

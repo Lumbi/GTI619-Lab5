@@ -73,7 +73,13 @@ module.exports = function(passport) {
                         if (err) console.log(err);
                         else console.log('Saved : ', data );
                     });
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                    if(!validateTempLockedOver(user)||user.isLockedFinal()){
+                        return done(null, false, req.flash('loginMessage', 'Oops! You are locked'));
+                    }
+                    else{
+                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                    }
+
                 }
 
 
@@ -82,7 +88,12 @@ module.exports = function(passport) {
                     console.log('Loading security')
 
 
-
+                    user._doc.local.locked='';
+                    user.markModified('local');
+                    user.save(function (err, data) {
+                        if (err) console.log(err);
+                        else console.log('user save : ', data );
+                    });
                     var userLog= new Log();
                     userLog.log.result='Connection Succesfull';
                     userLog.log.user=email;

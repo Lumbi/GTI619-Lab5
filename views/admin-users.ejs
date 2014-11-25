@@ -36,7 +36,7 @@
                                 <tr>
                                    <td><%= users[i].local.email %></td>
                                    <td><%= users[i].local.group %></td>
-                                   <% if(users[i].local.locked == '2') { %>
+                                   <% if(users[i].local.locked != 'T'||users[i].local.tempLocked) { %>
                                    <td>No</td>
                                    <% } else { %>
                                    <td>Yes</td>

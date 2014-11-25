@@ -31,7 +31,7 @@ function bruteForceProtect(userObject){
                 else{
                     userObject=updateLock(userObject);
                     var unlockedTime=new Date();
-                    unlockedTime.setMinutes(unlockedTime.getMinutes()+timeout.timeout);
+                    unlockedTime.setMinutes(unlockedTime.getMinutes()+parseInt(timeout.timeout));
                     userObject._doc.local.tempLocked=unlockedTime;
                     userObject.markModified('local');
 
@@ -80,6 +80,7 @@ console.log(user._doc.local.tempLocked);
     var test2=new Date().getTime();
     if(unlockedTime.getTime()<new Date().getTime()){
         user._doc.local.tempLocked='';
+        user._doc.local.locked='';
         user.markModified('local');
 
         user.save(function (err, data) {
