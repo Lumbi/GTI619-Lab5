@@ -33,6 +33,10 @@ function updateSecurityOptions(req,res){
 exports.updateSecurityOptions=updateSecurityOptions;
 
 function validateData(req,securityModel){
+        securityModel.enableBruteForceProtection=req.antibruteforce;
+        securityModel.enableDenyAfterSecondAttempt=req.autopermaban;
+        securityModel.requirePasswordChangeAfterForget=req.pwinvalidforget;
+        securityModel.complexity=req.pwcomplex;
 
     if(parseInt(req.maxpwtries)!=NaN&&req.maxpwtries!=''){
         securityModel.numberOfTry=req.maxpwtries;
@@ -41,6 +45,19 @@ function validateData(req,securityModel){
     if(parseInt(req.authdelay)!=NaN&&req.authdelay!=''){
         securityModel.authdelay=req.authdelay;
     }
+    if(parseInt(req.timeout)!=NaN&&req.timeout!=''){
+        securityModel.timeout=req.timeout;
+    }
+    if(parseInt(req.pwinvalidafter)!=NaN&&req.pwinvalidafter!=''){
+        securityModel.daysuntilreset=req.pwinvalidafter;
+    }
+
+    if(parseInt(req.inactivity)!=NaN&&req.inactivity!=''){
+        securityModel.inactivityTime=req.inactivity;
+    }
+
+
+
 
     return securityModel;
 }

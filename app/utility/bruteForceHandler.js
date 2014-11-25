@@ -10,26 +10,36 @@ function bruteForceProtect(userObject){
     var securityOption = mongoose.model("securityOptions");
 
     securityOption.find({},function(err, comments) {
-        console.log(comments);
+        //console.log(comments);
+
         var timeout=((comments[0])._doc.securityOption);
+        if(timeout.enableBruteForceProtection!='on'){
+            return;
+        }
         client.get(user.email, function (err, reply) {
 
             console.log("get: "+reply);
 
             if(reply!=null){
                 var currentCounter=parseInt(reply);
-                if(currentCounter<parseInt(timeout.timeout)){
-                    console.log("set counter:" + currentCounter++);
-                    client.set(user.email, currentCounter++, function (err, reply) {
+                if(currentCounter<parseInt(timeout.numberOfTry)){
+                  currentCounter++;
+                   console.log("set counter:" + currentCounter);
+                    client.set(user.email, currentCounter, function (err, reply) {
 
                         console.log("set:" +reply.toString());
 
                     });
-                    client.expire(user.email,60*parseInt(timeout.timeframe));
+                    client.expire(user.email,60*parseInt(timeout.authdelay));
 
                 }
                 else{
-                    userObject=updateLock(userObject);
+                    var maxNumberOfTry=-1;
+                    if(timeout.enableDenyAfterSecondAttempt=='on'){
+                        maxNumberOfTry=2
+                    }
+
+                    userObject=updateLock(userObject,maxNumberOfTry);
                     var unlockedTime=new Date();
                     unlockedTime.setMinutes(unlockedTime.getMinutes()+parseInt(timeout.timeout));
                     userObject._doc.local.tempLocked=unlockedTime;
@@ -49,7 +59,7 @@ function bruteForceProtect(userObject){
                     console.log("set:" +reply.toString());
 
                 });
-                client.expire(user.email,600)
+                client.expire(user.email,600)//600 délai des tentatives
             }
         }
         );
@@ -105,7 +115,7 @@ function updateLock(user,maxAttempt){
     else if(currentLock=='T'){
         //should check for the lock before but for now it w0ill work
     }
-    else if(parseInt(currentLock)+1==maxAttempt){
+    else if(parseInt(currentLock)+1>=maxAttempt&&maxAttempt!=-1){
         user._doc.local.locked='T';
     }
     else{
