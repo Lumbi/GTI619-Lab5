@@ -19,6 +19,10 @@ module.exports = function(app, passport) {
 	// PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
         var profileToRender=choseProfile(req.user.local.group)
+            if(!twoFactor(req)){
+                res.redirect('/logout');
+                return;
+            }
 
         if(req.user.local.group=="Admin")
         {
@@ -48,6 +52,11 @@ module.exports = function(app, passport) {
 	app.post('/profile/admin-update',isLoggedIn, function(req, res) {
 		console.log("request: "+ JSON.stringify(req.body.security))
         console.log("dfe"+req.user.local.group)
+        if(!twoFactor(req)){
+            res.redirect('/logout');
+            return;
+        }
+
         if(req.user.local.group=="Admin"){
             adminUpdate.updateSecurityOptions(req.body.security,res);
 
@@ -155,6 +164,8 @@ module.exports = function(app, passport) {
         gridcard.getQuestion(req.cookies,req.user,res);
 
 
+
+
     });
     app.post('/gridcard',isLoggedIn, function(req, res) {
         console.log(req.body.answer)
@@ -203,7 +214,9 @@ module.exports = function(app, passport) {
 };
 
 function isLoggedIn(req, res, next) {
-	if (req.isAuthenticated())
+
+
+    if (req.isAuthenticated()&&inactivityMonitor(req))
 		return next();
 
 	res.redirect('/');
@@ -228,4 +241,35 @@ function choseProfile(group){
     }
 
 return page;
+}
+
+
+function twoFactor(req){
+    if(req.session.twofactor==true){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+function inactivityMonitor(req){
+    var lastActivity=req.session.lastRequest;
+    var timeout=req.session.inactivityTime
+    var temp=(new Date())
+
+
+    var lastActivityTime=new Date(parseInt(lastActivity));
+    var as=lastActivityTime.getMinutes()+parseInt(timeout);
+    lastActivityTime.setMinutes(lastActivityTime.getMinutes()+parseInt(timeout));
+    var temp2=lastActivityTime.getTime();
+    if(lastActivityTime < new Date()){
+        console.log('time out exceeded')
+        return false;
+    }
+    else{
+        req.session.lastRequest=new Date().getTime();
+        return true;
+    }
+
 }

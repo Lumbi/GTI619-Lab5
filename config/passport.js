@@ -1,5 +1,5 @@
 var LocalStrategy    = require('passport-local').Strategy;
-
+var mongoose = require('mongoose');
 var User       = require('../app/models/user');
 var Log        =require('../app/models/log');
 var SecurityOption        =require('../app/models/securityOption');
@@ -87,11 +87,20 @@ module.exports = function(passport) {
                     userLog.log.result='Connection Succesfull';
                     userLog.log.user=email;
                     userLog.log.time=new Date();
+                    req.session.lastRequest=new Date().getTime();
                     userLog.save(function (err, data) {
                         if (err) console.log(err);
                         else console.log('Saved : ', data );
                     });
-                    return done(null, user);
+                    var securityOptions = mongoose.model("securityOptions");
+                    securityOptions.find({},function(err, result) {
+                        console.log(result);
+                        var inactivityTime=result[0].securityOption.inactivityTime;
+                        req.session.inactivityTime=inactivityTime;
+                        return done(null, user);
+                    });
+
+
                 }
 
             });

@@ -17,7 +17,8 @@ var userSchema = mongoose.Schema({
        timeframe              : String,
        enableBruteForceProtection : String,
        enableDenyAfterSecondAttempt : String,
-       authdelay : String
+       authdelay : String,
+        inactivityTime: String
     }
 
 });
