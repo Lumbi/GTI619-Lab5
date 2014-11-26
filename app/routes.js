@@ -5,6 +5,12 @@ var gridcard=require('../app/utility/gridCardManager')
 var mongoose = require('mongoose');
 var url = require('url');
 
+
+// Utilisé pour la génération de mot de passe
+String.prototype.replaceAt = function(index, character) {
+  return this.substr(0, index) + character + this.substr(index+character.length);
+}
+
 module.exports = function(app, passport) {
     var bodyParser = require('body-parser')
     var adminUpdate=require('../app/utility/adminUpdate');
@@ -29,8 +35,6 @@ module.exports = function(app, passport) {
         {
 	        var securityOptions = mongoose.model("securityOptions");
     	    securityOptions.find({},function(err, result) {
-    	    	console.log(result);
-    	    	console.log(result[0].securityOption);
 		        res.render(profileToRender, {
 					user : req.user,
 					security : result[0].securityOption
@@ -140,10 +144,71 @@ module.exports = function(app, passport) {
 
 			if(req.query.id != undefined)
 			{
-				require('crypto').randomBytes(8, function(ex, buf) {
-	  				var nouveauMotDePasse = buf.toString('hex');
-	  				//TODO: mettre à jour le mot de passe de l'utilisateur (avec Passport?)
-				});
+				var securityOptions = mongoose.model("securityOptions");
+	    	    securityOptions.find({},function(err, result) {
+
+					var options = result[0].securityOption;
+
+					var passwordLength = 4;
+					if(options.passwordLength > 4) {
+						passwordLength = parseInt(options.passwordLength);
+					} 
+
+					require('crypto').randomBytes(passwordLength, function(ex, buf) {
+		  				var nouveauMotDePasse = buf.toString('hex');
+
+		  				if(options.complexity == '1') // LOW
+		  				{
+		  					// do nothing
+		  				}if(options.complexity == '2'){ //MEDIUM
+							var specials = "!@#$%&*";
+							for (var i = 0; i < 2; i++) {
+								var randomPos = Math.floor(Math.random()*nouveauMotDePasse.length);
+								var randomSpecial = Math.floor(Math.random()*specials.length);
+								nouveauMotDePasse = nouveauMotDePasse.replaceAt(randomPos, specials[randomSpecial]);
+							};
+		  				}else{ // HIGH 
+							var specials = "!@#$%&*";
+							for (var i = 0; i < 4; i++) {
+								var randomPos = Math.floor(Math.random()*nouveauMotDePasse.length);
+								var randomSpecial = Math.floor(Math.random()*specials.length);
+								nouveauMotDePasse = nouveauMotDePasse.replaceAt(randomPos, specials[randomSpecial]);
+							};
+
+							var alphabet = "abcdefghijklmnopqrstuvwxyz"
+							for (var i = 0; i < 4; i++) {
+								var randomPos = Math.floor(Math.random()*nouveauMotDePasse.length);
+								var randomLetter = Math.floor(Math.random()*alphabet.length);
+								
+								if(Math.random() > 0.5)
+								{
+									nouveauMotDePasse = nouveauMotDePasse.replaceAt(randomPos, alphabet[randomLetter]);
+								}else{
+									nouveauMotDePasse = nouveauMotDePasse.replaceAt(randomPos, alphabet[randomLetter].toUpperCase());
+								}
+							};
+		  				}
+
+		  				console.log("Generated Password " + nouveauMotDePasse);
+
+		  				// Mettre à jour le mot de passe généré
+		  				var userModel = mongoose.model("User");
+		  				userModel.findById(req.query.id, function(err, user){
+
+		  					var salt = "gen";
+		  					var hash = user.createHash(nouveauMotDePasse, salt);
+		  					user.local.password = hash;
+		  					user.local.salt = salt;
+
+		  					user.markModified('local');
+		  					user.save(function(err, result){
+		  						if(err)
+		  							console.warn(err);
+		  						res.redirect("/profile/admin-users");
+		  					})
+		  				});
+					});
+	        	});
 
 			}else{
 				res.redirect("/profile/admin-users");
@@ -269,7 +334,6 @@ function inactivityMonitor(req){
     var lastActivity=req.session.lastRequest;
     var timeout=req.session.inactivityTime
     var temp=(new Date())
-
 
     var lastActivityTime=new Date(parseInt(lastActivity));
     var as=lastActivityTime.getMinutes()+parseInt(timeout);
