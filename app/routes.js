@@ -235,14 +235,17 @@ module.exports = function(app, passport) {
 		  				var userModel = mongoose.model("User");
 		  				userModel.findById(req.query.id, function(err, user){
 
-		  					var salt = "gen";
+		  					var salt = generateNewSalt();
 		  					var hash = user.createHash(nouveauMotDePasse, salt);
 		  					user.local.password = hash;
 		  					user.local.salt = salt;
+                            user.local.locked='';
+                            user.local.tempLocked='';
 
 		  					user.markModified('local');
 		  					user.local.markModified('password');
 		  					user.local.markModified('salt');
+
 		  					user.save(function(err, result){
 		  						if(err)
 		  							console.warn(err);
@@ -393,4 +396,17 @@ function inactivityMonitor(req){
         return true;
     }
 
+}
+
+
+function generateNewSalt()
+{
+    var saltLength=Math.floor(Math.random() * 10+5)
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < saltLength; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
 }

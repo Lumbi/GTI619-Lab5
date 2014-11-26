@@ -38,6 +38,7 @@ function bruteForceProtect(userObject){
                     if(timeout.enableDenyAfterSecondAttempt=='on'){
                         maxNumberOfTry=2
                     }
+                    client.del(userObject._doc.local.email)
 
                     userObject=updateLock(userObject,maxNumberOfTry);
                     var unlockedTime=new Date();
@@ -59,7 +60,11 @@ function bruteForceProtect(userObject){
                     console.log("set:" +reply.toString());
 
                 });
-                client.expire(user.email,600)//600 délai des tentatives
+                client.expire(user.email,60*parseInt(timeout.authdelay))//600 délai des tentatives
+
+
+
+
             }
         }
         );
