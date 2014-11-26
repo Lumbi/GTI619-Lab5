@@ -33,7 +33,6 @@
                                             <strong>password</strong>: <%= user.local.password %>
                         					<strong>group</strong>: <%= user.local.group %>
                                       </p>
-
                                       <% if (user.local.locked == 'T' || user.local.tempLocked) { %>
                                       <p>
                                       		<a href="/admin/unlock?id=<%= user._id%>" class="btn btn-default btn-sm">Unlock

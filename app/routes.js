@@ -22,7 +22,42 @@ module.exports = function(app, passport) {
 		res.render('index.ejs');
 	});
 
-	// PROFIL =========================
+
+
+
+    app.get('/circle', isLoggedIn, function(req, res) {
+        if(!twoFactor(req)){
+            res.redirect('/logout');
+            return;
+        }
+
+        if(req.user.local.group=="Admin"||req.user.local.group=="Circle")
+        {
+            res.render('circle.ejs', {
+                user : req.user
+            });
+        }
+    });
+
+    app.get('/square', isLoggedIn, function(req, res) {
+        if(!twoFactor(req)){
+            res.redirect('/logout');
+            return;
+        }
+
+        if(req.user.local.group=="Admin"||req.user.local.group=="Square")
+        {
+            res.render('square.ejs', {
+                user : req.user
+            });
+        }
+    });
+
+
+
+
+
+    // PROFIL =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
         req.user.local.locked='';
         var profileToRender=choseProfile(req.user.local.group)
@@ -289,6 +324,9 @@ module.exports = function(app, passport) {
 		});
 	});
 };
+
+
+
 
 function isLoggedIn(req, res, next) {
 

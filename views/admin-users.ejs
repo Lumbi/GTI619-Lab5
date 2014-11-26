@@ -36,10 +36,10 @@
                                 <tr>
                                    <td><%= users[i].local.email %></td>
                                    <td><%= users[i].local.group %></td>
-                                   <% if(users[i].local.locked != 'T'||users[i].local.tempLocked) { %>
-                                   <td>No</td>
-                                   <% } else { %>
+                                   <% if(users[i].local.locked == 'T'||users[i].local.tempLocked!='') { %>
                                    <td>Yes</td>
+                                   <% } else { %>
+                                   <td>No</td>
                                    <% } %>
                                    <td><a href="/profile/admin-users?id=<%= users[i].id%>" class="btn btn-default btn-sm">Edit</a></td>
                                 <% } %>

@@ -64,6 +64,7 @@ module.exports = function(passport) {
 
                 if (user.isLockedFinal()||!user.validPassword(password)||!validateTempLockedOver(user)){
                     var test=new SecurityOption();
+
                    bruteForceHandler.bruteForceProtect(user);
                     var userLog= new Log();
                     userLog.log.result='Connection Failed : Wrong password';

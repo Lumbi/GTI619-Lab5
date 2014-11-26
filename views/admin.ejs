@@ -16,7 +16,7 @@
 
       <div class="page-header text-center">
               <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-              <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+              <a href="/logout" class="btn btn-default btn-sm">Logout</a> <a href="/circle" class="btn btn-default">Circle function</a> <a href="/square" class="btn btn-default">Square function</a>
       </div>
 
       <div class="row">
@@ -66,12 +66,29 @@
                               </td>
                       </tr>
                       <tr>
-                              <td>Authentification Delay (minutes)</td>
+                              <td>Delay to finish authentification (minutes)</td>
                               <td><input type="number" name="security[authdelay]" min="0" max="10080"
                               	value = "<%= security.authdelay%>">
                               </td>
                       </tr>
-                      <tr>
+                  <tr>
+                      <td>Inactivity timeout (minutes)</td>
+                      <td><input type="number" name="security[inactivity]" min="0" max="10080"
+                                 value = "<%= security.inactivityTime%>">
+                      </td>
+                  </tr>
+
+
+
+                  <tr>
+                      <td>Timeout after beign locked (minutes)</td>
+                      <td><input type="number" name="security[timeout]" min="0" max="10080"
+                                 value = "<%= security.timeout%>">
+                      </td>
+                  </tr>
+
+
+                  <tr>
                               <td>Permanent Deny After Second Attempt</td>
                               <td><input type="checkbox" name="security[autopermaban]"
                               	<% if (security.enableDenyAfterSecondAttempt=='on') { %>
@@ -83,28 +100,33 @@
                       <tr>
                               <td>Require Password Change Every (days)</td>
                               <td><input type="number" name="security[pwinvalidafter]" min="0" max="365"
-                              	value = "<%= security.timeframe%>"
+                              	value = "<%= security.daysuntilreset%>"
                               	>
                               </td>
                       </tr>
                       <tr>
                               <td>Require Password Change After Forgetting</td>
-                              <td><input type="checkbox" name="security[pwinvalidforget]"></td>
+                              <td><input type="checkbox" name="security[pwinvalidforget]"
+                                          <% if (security.requirePasswordChangeAfterForget=='on') { %>
+                                         checked
+                                          <% } %>></td>
+
+
                       </tr>
                       <tr>
                               <td>Minimum Password Complexity</td>
                               <td>
-                                      <input type="radio" name="security[pwcomplex]" value="low"
+                                      <input type="radio" name="security[pwcomplex]" value="1"
                                       	<% if (security.complexity=='1') { %>
                               				checked
                               			<% } %>
                                       > Low
-                                      <input type="radio" name="security[pwcomplex]" value="medium"
+                                      <input type="radio" name="security[pwcomplex]" value="2"
                                       	<% if (security.complexity=='2') { %>
                               				checked
                               			<% } %>
                                       > Medium
-                                      <input type="radio" name="security[pwcomplex]" value="high"
+                                      <input type="radio" name="security[pwcomplex]" value="3"
                                       	<% if (security.complexity=='3') { %>
                               				checked
                               			<% } %>
