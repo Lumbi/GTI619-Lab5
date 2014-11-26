@@ -18,33 +18,20 @@ var userSchema = mongoose.Schema({
 
 });
 
-// generating a hash
-userSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+// non utilisé
+// userSchema.methods.generateHash = function(password) {
+    // return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+// };
 
-//check if the user has been totally locked out of the system
+// completement suspendu
 userSchema.methods.isLockedFinal = function() {
 
 console.log("lock :"+ this.local.locked);
-    console.log(this.local.locked=='T')
     var a= this.local.locked=='T';
     return a;
 };
 
-
-// checking if password is valid
-userSchema.methods.validPassword = function(password) {
-    var hashedPassword= createHash(password,this.local.salt);
-    console.log(this.local.salt);
-
-    return hashedPassword==this.local.password;
-};
-
-// create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
-
-function createHash(password,salt){
+userSchema.methods.createHash = function(password,salt){
   var hash=password;
     var numberOfPass=3;
     for(var index=0;index<numberOfPass;index++){
@@ -54,7 +41,18 @@ function createHash(password,salt){
         hash=hasher.digest('hex');
 
     }
-    console.log(hash)
-
     return hash;
 }
+
+// checking if password is valid
+userSchema.methods.validPassword = function(password) {
+    var hashedPassword= this.createHash(password,this.local.salt);
+    return hashedPassword==this.local.password;
+};
+
+// create the model for users and expose it to our app
+module.exports = mongoose.model('User', userSchema);
+
+
+
+

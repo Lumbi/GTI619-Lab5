@@ -179,6 +179,7 @@ module.exports = function(app, passport) {
 
 			if(req.query.id != undefined)
 			{
+				// Fetch Security Options
 				var securityOptions = mongoose.model("securityOptions");
 	    	    securityOptions.find({},function(err, result) {
 
@@ -189,6 +190,7 @@ module.exports = function(app, passport) {
 						passwordLength = parseInt(options.passwordLength);
 					} 
 
+					// Generate random HEX
 					require('crypto').randomBytes(passwordLength, function(ex, buf) {
 		  				var nouveauMotDePasse = buf.toString('hex');
 
@@ -224,7 +226,10 @@ module.exports = function(app, passport) {
 							};
 		  				}
 
-		  				console.log("Generated Password " + nouveauMotDePasse);
+		  				console.log("----------------------");
+		  				console.log("Mot de passe généré pour  : " + req.query.id);
+		  				console.log("[ " + nouveauMotDePasse + " ]")
+		  				console.log("----------------------");
 
 		  				// Mettre à jour le mot de passe généré
 		  				var userModel = mongoose.model("User");
@@ -236,6 +241,8 @@ module.exports = function(app, passport) {
 		  					user.local.salt = salt;
 
 		  					user.markModified('local');
+		  					user.local.markModified('password');
+		  					user.local.markModified('salt');
 		  					user.save(function(err, result){
 		  						if(err)
 		  							console.warn(err);
